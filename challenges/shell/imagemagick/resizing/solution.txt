@@ -1,0 +1,1 @@
+magick damon.jpg -resize 25% safranek.jpg

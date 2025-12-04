@@ -1,0 +1,4 @@
+mv *.{jpg,png} Images/
+
+
+

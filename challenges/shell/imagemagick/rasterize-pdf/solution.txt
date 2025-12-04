@@ -1,0 +1,3 @@
+magick document.pdf page%d.png
+   i think this is the answer, but the test doesn't run green 
+   

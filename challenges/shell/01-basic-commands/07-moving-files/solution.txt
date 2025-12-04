@@ -1,0 +1,5 @@
+mv liliana.jpg isidoro.png Images/    de test werkt niet, weet niet waarom, denk dat dit correct moet zijn.
+
+
+
+
