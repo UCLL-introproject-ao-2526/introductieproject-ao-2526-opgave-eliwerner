@@ -42,3 +42,7 @@ ik heb de HIT- en STAND-knoppen werkend gemaakt. Met hand_active kan de speler n
 ## 8 December 2025 1321
 Ik heb de results-lijst toegevoegd om berichten voor verschillende uitkomsten van het spel op te slaan, en de variabele outcome om het resultaat van de huidige hand bij te houden. Daarnaast heb ik de functie check_endgame() gemaakt, die automatisch controleert of de speler gebust is, gewonnen, verloren of gelijk gespeeld heeft, en de records-lijst hierop aanpast. Ook heb ik de DEAL HAND-knop toegevoegd en de functionaliteit ervan geïmplementeerd in de event-lus, zodat het klikken erop een nieuw spel start, de beginhanden van speler en dealer worden gedeeld en alle noodzakelijke spelvariabelen worden gereset. Dit zorgt ervoor dat het spel correct van ronde naar ronde verloopt.
 
+## 9 December 2025 1157
+Ik heb de volledige tutorial afgewerkt en ga een aparte commit maken met een duidelijke boodschap dat de tutorial is afgerond. Dit vormt nu een duidelijk eindpunt van het basisproject, zodat ik vanaf hier kan beginnen aan mijn eigen uitbreidingen.
+
+
