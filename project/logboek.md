@@ -45,4 +45,5 @@ Ik heb de results-lijst toegevoegd om berichten voor verschillende uitkomsten va
 ## 9 December 2025 1157
 Ik heb de volledige tutorial afgewerkt en ga een aparte commit maken met een duidelijke boodschap dat de tutorial is afgerond. Dit vormt nu een duidelijk eindpunt van het basisproject, zodat ik vanaf hier kan beginnen aan mijn eigen uitbreidingen.
 
-
+## 9 December 2025 1723
+Vandaag heb ik mijn Blackjack-project uitgebreid met echte kaartafbeeldingen. Daarbij heb ik gemerkt dat ik ondertussen ook veel nieuwe dingen in Python heb geleerd, zoals werken met os voor paden, regex om kaartnamen te herkennen en hoe je afbeeldingen efficiënt beheert in Pygame. Het was dus niet alleen een uitbreiding van mijn spel, maar ook echt een leermoment waarin ik nieuwe modules en technieken heb ontdekt.
