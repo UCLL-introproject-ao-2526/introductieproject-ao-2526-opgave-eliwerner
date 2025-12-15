@@ -7,6 +7,8 @@ import random
 import pygame
 import os     # voor padbewerkingen, kaarten map
 import re     # voor parsen van kaartnamen
+import math   # voor wiskundige functies
+
 
 pygame.init()
 
@@ -16,14 +18,14 @@ pygame.init()
 cards = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
 one_deck = 4 * cards
 decks = 4
-WIDTH = 600
+WIDTH = 800
 HEIGHT = 900
 screen = pygame.display.set_mode([WIDTH, HEIGHT])
 pygame.display.set_caption("Pygame Blackjack!")
 fps = 60
 timer = pygame.time.Clock()
-font = pygame.font.Font('freesansbold.ttf', 44)
-smaller_font = pygame.font.Font('freesansbold.ttf', 36)
+
+
 active = False
 # win, loss, draw/push
 records = [0, 0, 0]
@@ -38,17 +40,40 @@ hand_active = False
 outcome = 0
 add_score = False
 results = ['', 'PLAYER BUSTED o_O', 'Player WINS! :)', 'DEALER WINS :(', 'TIE GAME...']
-# startmenu variabelen
+
+# =========================
+card_animations = []
+chip_particles = []
+button_hover = [False, False, False]
+glow_timer = 0
+win_celebration = 0
+pulse_timer = 0
+
+GREEN_FELT = (0, 100, 0)
+DARK_GREEN = (0, 70, 0)
+GOLD = (255, 215, 0)
+DARK_GOLD = (184, 134, 11)
+RED = (220, 20, 60)
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+
+card_font = pygame.font.Font('freesansbold.ttf', 48)
+font = pygame.font.Font('freesansbold.ttf', 44)
+smaller_font = pygame.font.Font('freesansbold.ttf', 36)
+tiny_font = pygame.font.Font('freesansbold.ttf', 24)
+
+
 menu_active = True
 start_buttons = []
-
-
-
-
 # =========================
-# 3. Kaartafbeeldingen (NIEUW)
-# =========================
-CARD_SIZE = (120, 220)  # grootte van kaarten
+
+
+
+
+
+
+
+CARD_SIZE = (100, 140)  # grootte van kaarten
 ASSETS_DIR = os.path.join(os.path.dirname(__file__), 'png')  # map met png's
 rank_to_surfaces_master = {}   # masterlijst van alle afbeeldingen per rank
 rank_to_surfaces_pool = {}     # pool die we leegtrekken bij dealen
@@ -58,25 +83,6 @@ dealer_hand_images = []        # afbeeldingen van dealerhand
 
 
 
-
-
-def draw_start_menu():
-    global start_buttons
-    start_buttons = []
-
-    screen.fill('black')
-    # Titel
-    title_text = font.render("BLACKJACK", True, 'white')
-    # Plaats het in het midden van het scherm: WIDTH//2 is het midden van het scherm
-    # We trekken de helft van de breedte van de tekst af om precies te centreren
-    screen.blit(title_text, (WIDTH//2 - title_text.get_width()//2, 200))
-
-
-
-
-# =========================
-# 4. Rank parser (NIEUW)
-# =========================
 SUIT_TOKENS = r"hearts|heart|diamonds|diamond|clubs|club|spades|spade|h|d|c|s"
 
 def parse_rank_from_filename(name_lower):
@@ -96,10 +102,6 @@ def parse_rank_from_filename(name_lower):
             if re.search(rf"\b({SUIT_TOKENS})\b", base):
                 return rank
     return None
-
-# =========================
-# 5. Load card images (NIEUW)
-# =========================
 
 def load_card_assets(folder, size):
     global card_back_surface, rank_to_surfaces_master
@@ -128,21 +130,12 @@ def load_card_assets(folder, size):
     card_back_surface = backs[0] if backs else None
     rank_to_surfaces_master = rank_map    
 
-
-# =========================
-# 6. Reset image pool (NIEUW)
-# =========================
 def reset_image_pool():
     global rank_to_surfaces_pool, my_hand_images, dealer_hand_images
     rank_to_surfaces_pool = {r:list(surfaces) for r, surfaces in rank_to_surfaces_master.items()}
     my_hand_images = []
     dealer_hand_images = []
 
-
-
-# =========================
-# 7. Choose surface for rank (NIEUW)
-# =========================
 def choose_surface_for_rank(rank):
     pool = rank_to_surfaces_pool.get(rank, [])
     if pool:
@@ -150,11 +143,6 @@ def choose_surface_for_rank(rank):
     master = rank_to_surfaces_master.get(rank, [])
     return master[-1] if master else None
 
-
-
-# =========================
-# 8. Deal cards (Aangepast)
-# =========================
 def deal_cards(current_hand, current_deck, image_list):
     card_index = random.randint(0,len(current_deck)-1)
     rank = current_deck[card_index]
@@ -164,21 +152,31 @@ def deal_cards(current_hand, current_deck, image_list):
     image_list.append(surf)
     return current_hand, current_deck
 
-
-
-# =========================
-# 9. Draw cards (Aangepast)
-# =========================
-
 # draw cards visually onto screen
 def draw_cards(player, dealer, reveal):
+     # NIEUW: DEALER LABEL (uit jouw mooie versie)
+    dealer_label = tiny_font.render("DEALER", True, GOLD)
+    screen.blit(dealer_label, (50, 30))
+
+     # NIEUW: PLAYER LABEL (uit jouw mooie versie)
+    player_label = tiny_font.render("PLAYER", True, GOLD)
+    screen.blit(player_label, (50, 480))
+
     # speler kaarten
     for i in range(len(player)):
-        x = 70 + (70*i)
-        y = 460 + (5*i)
+        x = 50 + (120 * i)  # 120 pixels tussen (zoals mooie versie)
+        y = 510
         rect = pygame.Rect(x, y, CARD_SIZE[0], CARD_SIZE[1])
-        pygame.draw.rect(screen, 'white', rect, 0, 5)
-        pygame.draw.rect(screen, 'red', rect, 3, 5)
+        # NIEUW: Schaduw effect (5 pixels rechts en onder)
+        shadow_rect = pygame.Rect(x + 5, y + 5, CARD_SIZE[0], CARD_SIZE[1])
+        pygame.draw.rect(screen, (30, 30, 30), shadow_rect, 0, 10)
+
+        # NIEUW: Kaart met rondere hoeken
+        pygame.draw.rect(screen, WHITE, rect, 0, 10)
+
+        # NIEUW: Gouden rand
+        pygame.draw.rect(screen, GOLD, rect, 3, 10)
+
         surf = my_hand_images[i] if i < len(my_hand_images) else None
         if surf:
             screen.blit(surf, (x, y))
@@ -186,11 +184,16 @@ def draw_cards(player, dealer, reveal):
             screen.blit(font.render(str(player[i]), True, 'black'), (x+10, y+10))
     # dealer kaarten
     for i in range(len(dealer)):
-        x = 70 + (70*i)
-        y = 160 + (5*i)
+        x = 50 + (120 * i)  # 120 pixels tussen (zoals mooie versie)
+        y = 60
         rect = pygame.Rect(x, y, CARD_SIZE[0], CARD_SIZE[1])
-        pygame.draw.rect(screen, 'white', rect, 0, 5)
-        pygame.draw.rect(screen, 'red', rect, 3, 5)
+        # Schaduw
+        shadow_rect = pygame.Rect(x + 5, y + 5, CARD_SIZE[0], CARD_SIZE[1])
+        pygame.draw.rect(screen, (30, 30, 30), shadow_rect, 0, 10)
+        # kaart
+        pygame.draw.rect(screen, 'white', rect, 0, 10)
+        pygame.draw.rect(screen, 'gold', rect, 3, 10)
+
         if i == 0 and not reveal and card_back_surface:
             screen.blit(card_back_surface, (x, y))
         else:
@@ -200,7 +203,6 @@ def draw_cards(player, dealer, reveal):
             else:
                 screen.blit(font.render(str(dealer[i]) if (i != 0 or reveal) else '???', True, 'black'), (x+10, y+10))
         
-
 # pass in player or dealer hand and get best score possible
 def calculate_score(hand):
     # calculate hand score fresh each time, check how many aces we have
@@ -224,54 +226,161 @@ def calculate_score(hand):
                 hand_score -= 10
     return hand_score
 
-
-
 # draw game conditions and buttons 
 def draw_game(act, record, result):
     button_list = []
+    global button_hover
+
+    # NIEUW: Haal de muispositie op
+    mouse_pos = pygame.mouse.get_pos()
+
     # initially on startup (not active) only option is to deal new hand
     if not act:
-        deal = pygame.draw.rect(screen, 'white', [150, 20, 300, 100], 0, 5)
-        pygame.draw.rect(screen, 'green', [150, 20, 300, 100], 3, 5)
-        deal_text = font.render('DEAL HAND', True, 'black')
-        screen.blit(deal_text, (165, 50))
+        # NIEUW: Maak een pygame.Rect object
+        deal = pygame.Rect(250, 400, 300, 100)
+        
+        # NIEUW: Check of muis over knop zweeft
+        button_hover[0] = deal.collidepoint(mouse_pos)
+        
+        # NIEUW: Gebruik de glow button functie!
+        # GREEN_FELT = achtergrond, GOLD = glow kleur
+        draw_glow_button(deal, 'DEAL HAND', GREEN_FELT, GOLD, button_hover[0])
+        
         button_list.append(deal)
     
     # once game started, show hit and stand buttons and win/loss records
     else:
-        hit = pygame.draw.rect(screen, 'white', [0, 700, 300, 100], 0, 5)
-        pygame.draw.rect(screen, 'green', [0, 700, 300, 100], 3, 5)
-        hit_text = font.render('HIT ME', True, 'black')
-        screen.blit(hit_text, (55, 735))
+        # HIT knop - groene achtergrond
+        hit = pygame.Rect(100, 750, 240, 80)
+        button_hover[0] = hit.collidepoint(mouse_pos)
+        draw_glow_button(hit, 'HIT ME', GREEN_FELT, GOLD, button_hover[0])
         button_list.append(hit)
-        stand = pygame.draw.rect(screen, 'white', [300, 700, 300, 100], 0, 5)
-        pygame.draw.rect(screen, 'green', [300, 700, 300, 100], 3, 5)
-        stand_text = font.render('STAND', True, 'black')
-        screen.blit(stand_text, (355, 735))
+        
+        # STAND knop - RODE achtergrond (voor contrast)
+        stand = pygame.Rect(460, 750, 240, 80)
+        button_hover[1] = stand.collidepoint(mouse_pos)
+        draw_glow_button(stand, 'STAND', RED, GOLD, button_hover[1])  # RED i.p.v. GREEN_FELT
         button_list.append(stand)
-        score_text = smaller_font.render(f"Wins: {record[0]}   Losses: {record[1]}   Draws: {record[2]}", True, 'white')
-        screen.blit(score_text, (15, 840))
+
+        # Maak een mooie panel voor de statistieken
+        panel_rect = pygame.Rect(50, 840, WIDTH - 100, 50)  # Breed, dunne panel
+
+        # Transparante zwarte achtergrond
+        s = pygame.Surface((panel_rect.width, panel_rect.height), pygame.SRCALPHA)
+        pygame.draw.rect(s, (0, 0, 0, 150), s.get_rect(), border_radius=10)
+        screen.blit(s, panel_rect.topleft)
+
+        # Gouden rand
+        pygame.draw.rect(screen, GOLD, panel_rect, 2, 10)
+
+        # Tekst gecentreerd in de panel
+        score_text = tiny_font.render(f"Wins: {record[0]}  Losses: {record[1]}  Draws: {record[2]}", 
+                                     True, GOLD)
+        screen.blit(score_text, (WIDTH//2 - score_text.get_width()//2, 855))
+
+
+
     # if there is an outcome for the hand that was played, display a restart button and tell user what happened
     if result != 0:
-        screen.blit(font.render(results[result], True, 'white'), (15, 25))
-        deal = pygame.draw.rect(screen, 'white', [150, 220, 300, 100], 0, 5)
-        pygame.draw.rect(screen, 'green', [150, 220, 300, 100], 3, 5)
-        pygame.draw.rect(screen, 'black', [153, 223, 294, 94], 3, 5)
-        deal_text = font.render('NEW HAND', True, 'black')
-        screen.blit(deal_text, (165, 250))
+        # Result banner - Dit maakt de mooie "Player WINS!" banner
+    
+        # 1. Bepaal kleuren voor elk resultaat type
+        #    Dit is een dictionary: {key: value}
+        #    key=result_nummer, value=kleur
+        result_colors = {1: RED, 2: GOLD, 3: RED, 4: WHITE}
+        # 1 = PLAYER BUSTED → Rood
+        # 2 = Player WINS! → Goud (feest!)
+        # 3 = DEALER WINS → Rood  
+        # 4 = TIE GAME... → Wit
+
+        # 2. Bereken Y-positie met animatie
+        #    pulse_timer gaat elke frame omhoog (in main loop)
+        #    math.sin() geeft een golf tussen -1 en 1
+        #    Dus banner_y gaat: 275 → 280 → 285 → 280 → 275...
+        banner_y = 280 + int(5 * math.sin(pulse_timer / 10))
+        # Start op 280 pixels van boven
+        # +/- 5 pixels beweging
+        # /10 = langzame beweging (elke 10 frames een cyclus)
+
+        # 3. Maak de tekst surface
+        #    results[result] = de juiste tekst uit de results lijst
+        #    result_colors.get(result, WHITE) = haal kleur op, anders wit
+        result_surf = font.render(results[result], True, result_colors.get(result, WHITE))
+
+        # 4. Centreer de tekst op scherm
+        #    result_rect wordt een rechthoek ROND de tekst
+        #    center=(WIDTH//2, banner_y) = midden van scherm, op banner_y hoogte
+        result_rect = result_surf.get_rect(center=(WIDTH // 2, banner_y))
+
+        # 5. Maak een grotere rechthoek voor de banner achtergrond
+        #    result_rect.x - 20 = 20 pixels links van tekst beginnen
+        #    result_rect.y - 10 = 10 pixels boven tekst beginnen  
+        #    result_rect.width + 40 = 20+20 pixels breder dan tekst
+        #    result_rect.height + 20 = 10+10 pixels hoger dan tekst
+        bg_rect = pygame.Rect(result_rect.x - 20, result_rect.y - 10, 
+                              result_rect.width + 40, result_rect.height + 20)
+        
+        # 6. Maak transparante banner achtergrond
+        #    pygame.SRCALPHA = maak een doorzichtig canvas
+        s = pygame.Surface((bg_rect.width, bg_rect.height), pygame.SRCALPHA)
+
+        # 7. Teken zwarte rechthoek op transparant canvas
+        #    (0, 0, 0, 200) = zwart met 200/255 transparantie (78% zichtbaar)
+        #    border_radius=10 = maak hoeken rond
+        pygame.draw.rect(s, (0, 0, 0, 200), s.get_rect(), border_radius=10)
+
+        # 8. Plak het transparante canvas op het scherm
+        #    bg_rect.topleft = linkerbovenhoek van banner
+        screen.blit(s, bg_rect.topleft)
+
+        # 9. Teken een rand OM de banner
+        #    result_colors.get(result, WHITE) = rand in resultaat kleur
+        #    3 = dikte van de rand (3 pixels)
+        pygame.draw.rect(screen, result_colors.get(result, WHITE), bg_rect, 3, 10)
+
+        # 10. Teken de tekst over de banner heen
+        screen.blit(result_surf, result_rect)
+
+        # 11. NEW HAND knop (voor nieuwe ronde)
+        #     250, 340 = positie (x, y)
+        #     300, 80 = grootte (breedte, hoogte)
+        deal = pygame.Rect(250, 340, 300, 80)
+
+
+        # 12. Check of muis over knop zweeft
+        button_hover[2] = deal.collidepoint(mouse_pos)
+
+        # 13. Teken de knop met glow effect
+        draw_glow_button(deal, 'NEW HAND', GREEN_FELT, GOLD, button_hover[2])
+
+        # 14. Voeg toe aan button lijst voor klik detectie
         button_list.append(deal)
+
+        
     return button_list
 
-
-    
 
 
 # draw scores for player and dealer on screen
 def draw_scores(player, dealer):
-    screen.blit(font.render(f"Score[{player}]", True, 'white'), (350, 400))
-    if reveal_dealer:
-        screen.blit(font.render(f"Score[{dealer}]", True, 'white'), (350, 100))
+    # Player score panel (altijd zichtbaar)
+    player_panel = pygame.Rect(50, 680, 220, 50)  # Positie aanpassen aan jouw layout
+    pygame.draw.rect(screen, (0, 0, 0, 180), player_panel, border_radius=10)
+    pygame.draw.rect(screen, GOLD, player_panel, 3, 10)
 
+    player_text = smaller_font.render(f"Score: {player}", True, GOLD)
+    screen.blit(player_text, (player_panel.centerx - player_text.get_width()//2, 
+                              player_panel.centery - player_text.get_height()//2))
+    
+    # Dealer score (alleen als onthuld)
+    if reveal_dealer:
+        dealer_panel = pygame.Rect(50, 230, 220, 50)
+        pygame.draw.rect(screen, (0, 0, 0, 180), dealer_panel, border_radius=10)
+        pygame.draw.rect(screen, GOLD, dealer_panel, 3, 10)
+        
+        dealer_text = smaller_font.render(f"Score: {dealer}", True, GOLD)
+        screen.blit(dealer_text, (dealer_panel.centerx - dealer_text.get_width()//2,
+                                 dealer_panel.centery - dealer_text.get_height()//2))
 
 # check endgame conditions function
 def check_endgame(hand_act, deal_score, play_score, result, totals, add):
@@ -297,6 +406,108 @@ def check_endgame(hand_act, deal_score, play_score, result, totals, add):
     return result, totals, add
 
 
+def draw_gradient_bg():
+    """
+    Teken een gradient achtergrond van donker groen bovenaan naar licht groen onderaan.
+    We tekenen 900 horizontale lijnen (één per pixel rij), elk met een iets andere kleur.
+    """
+    # Ons scherm is HEIGHT pixels hoog (HEIGHT = 900)
+    # We gaan elke rij van boven naar onder langs
+    for rij_nummer in range(HEIGHT):
+        # Bepaal hoe ver we zijn van boven naar onder
+        # rij 0 = bovenaan, rij 899 = onderaan
+        # positie is een getal tussen 0.0 (boven) en 1.0 (onder)
+        positie = rij_nummer / HEIGHT
+        
+        # Bereken de groene kleur voor deze rij
+        # Start bij 70 (donker groen), eindig bij 100 (licht groen)
+        # 70 + (30 * positie) betekent:
+        # - Als positie = 0.0 (boven): 70 + 0 = 70
+        # - Als positie = 0.5 (midden): 70 + 15 = 85
+        # - Als positie = 1.0 (onder): 70 + 30 = 100
+        groen_waarde = 70 + int(30 * positie)
+        
+        # Teken een horizontale lijn over de hele breedte met deze kleur
+        # (0, rij_nummer) = begin links op deze rij
+        # (WIDTH, rij_nummer) = eindig rechts op deze rij (WIDTH = 600)
+        pygame.draw.line(screen, (0, groen_waarde, 0), (0, rij_nummer), (WIDTH, rij_nummer))
+
+
+
+def draw_glow_button(rect, text, base_color, glow_color, hover=False):
+    """
+    Parameters (ingrediënten):
+    rect: pygame.Rect object - de positie en grootte van de knop (bijv. x=150, y=20, width=300, height=100)
+    text: string - wat er op de knop moet staan (bijv. "DEAL HAND")
+    base_color: tuple (R,G,B) - de achtergrondkleur van de knop (bijv. (0,100,0) = donkergroen)
+    glow_color: tuple (R,G,B) - de kleur van de glow en rand (bijv. (255,215,0) = goud)
+    hover: boolean (True/False) - of de muis over de knop zweeft
+    """
+    
+    # 1. GLOW EFFECT - alleen als muis erover zweeft
+    if hover:  # Als hover=True (dus als muis op knop staat)
+        # Bereken hoe groot de glow moet zijn met een golfbeweging
+        # glow_timer wordt elke frame met 1 verhoogd (in de main loop)
+        # math.sin(glow_timer / 10) maakt een golf tussen -1 en 1
+        # Voorbeeld: als glow_timer=0 → sin(0)=0 → 10 + 5*0 = 10
+        #           als glow_timer=15 → sin(1.5)=0.997 → 10 + 5*0.997 ≈ 15
+        #           als glow_timer=31 → sin(3.1)=-0.999 → 10 + 5*(-0.999) ≈ 5
+        glow_size = 10 + int(5 * math.sin(glow_timer / 10))
+        
+        # Maak een grotere rechthoek dan de knop zelf voor de glow
+        # inflate(glow_size, glow_size) betekent: maak zowel breedte als hoogte glow_size pixels groter
+        # Als knop 300x100 is en glow_size=15 → glow wordt 315x115
+        glow_rect = rect.inflate(glow_size, glow_size)
+        
+        # Maak een nieuw transparant "canvas" waarop we kunnen tekenen
+        # pygame.SRCALPHA betekent: dit canvas heeft een alpha (transparantie) kanaal
+        s = pygame.Surface((glow_rect.width, glow_rect.height), pygame.SRCALPHA)
+        
+        # Teken een glow op het transparante canvas
+        # (*glow_color, 80): neem de glow_color (bijv. (255,215,0)) en voeg alpha 80 toe → (255,215,0,80)
+        # 80/255 = ongeveer 31% transparantie (70% doorschijnend)
+        # s.get_rect() geeft de volledige grootte van het canvas
+        # border_radius=10 betekent: maak de hoeken rond met radius 10 pixels
+        pygame.draw.rect(s, (*glow_color, 80), s.get_rect(), border_radius=10)
+        
+        # Plak het glow-canvas op het hoofdscherm
+        # glow_rect.topleft is de positie waar de glow moet komen
+        screen.blit(s, glow_rect.topleft)
+    # EINDE van glow effect - dit was ALLEEN als hover=True
+    
+    # 2. DE KNOPSACHTERGROND
+    # Teken een gevulde rechthoek met de basiskleur
+    # rect = de positie/grootte die we als parameter kregen
+    # 0 = vul de rechthoek volledig (geen lijnen, maar opvulling)
+    # 10 = border radius: maak de hoeken rond (radius 10 pixels)
+    pygame.draw.rect(screen, base_color, rect, 0, 10)
+    
+    # 3. DE RAND VAN DE KNOP
+    # Teken de rand van de knop in de glow-kleur
+    # 4 = dikte van de rand (4 pixels dik)
+    pygame.draw.rect(screen, glow_color, rect, 4, 10)
+    
+    # 4. DE TEKST VAN DE KNOP
+    # Maak de tekst surface (het "plaatje" van de tekst)
+    # font.render maakt een afbeelding van de tekst
+    text_surf = font.render(text, True, BLACK)  # Zwarte tekst
+    
+    # Maak een SCHADUW versie van de tekst (donkerder en transparant)
+    # (0,0,0,128) = zwart met 50% transparantie (128/255 = 0.5)
+    shadow_surf = font.render(text, True, (0, 0, 0, 128))
+    
+    # Bereken waar de tekst precies moet komen (in het midden van de knop)
+    # get_rect(center=rect.center): maak een rechthoek rond de tekst en centreer die
+    text_rect = text_surf.get_rect(center=rect.center)
+    
+    # Teken EERST de schaduw (2 pixels naar rechtsonder verschoven)
+    screen.blit(shadow_surf, (text_rect.x + 2, text_rect.y + 2))
+    
+    # Teken DAN de echte tekst eroverheen
+    screen.blit(text_surf, text_rect)
+        
+
+
 
 # main game loop
 run = True
@@ -305,7 +516,14 @@ load_card_assets(ASSETS_DIR, CARD_SIZE) # nieuw: laad alle kaarten
 while run:
     # run game at our framerate an fill screen with bg color
     timer.tick(fps)
-    screen.fill('black')
+    # NIEUW: Update de glow timer voor de animatie - ZONDER DIT WERKT DE GLOW NIET!
+    pulse_timer += 1
+    glow_timer += 1
+    if glow_timer > 1000:  # Voorkom dat het getal te groot wordt
+        glow_timer = 0
+    draw_gradient_bg()
+    
+
     # initial deal to player and dealer
     if initial_deal:
         reset_image_pool()  # nieuw: reset de afbeelding pool

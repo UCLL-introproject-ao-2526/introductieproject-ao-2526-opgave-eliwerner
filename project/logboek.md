@@ -47,3 +47,16 @@ Ik heb de volledige tutorial afgewerkt en ga een aparte commit maken met een dui
 
 ## 9 December 2025 1723
 Vandaag heb ik mijn Blackjack-project uitgebreid met echte kaartafbeeldingen. Daarbij heb ik gemerkt dat ik ondertussen ook veel nieuwe dingen in Python heb geleerd, zoals werken met os voor paden, regex om kaartnamen te herkennen en hoe je afbeeldingen efficiënt beheert in Pygame. Het was dus niet alleen een uitbreiding van mijn spel, maar ook echt een leermoment waarin ik nieuwe modules en technieken heb ontdekt.
+
+## 10 December 2025 21:12
+Gradient achtergrond toegevoegd. Het leek moeilijk maar was eigenlijk simpel: 900 lijnen, elke iets lichter. Animaties lijken eng maar ik ga er wel raken met doorzetten.
+
+## 11 December 2025 21:10
+Vandaag DEALER/PLAYER labels toegevoegd en kaarten visueel verbeterd met schaduweffecten en gouden randen. Scores nu in mooie transparante panels. Leerde hoe tekst centrering werkt in PyGame. Spel ziet er veel professioneler uit.
+
+## 14 December 2025 12:22
+Ik heb glow buttons toegevoegd die een pulserende gouden rand krijgen als de muis erover zweeft. Eerst werkte de animatie niet omdat ik vergat de glow_timer elke frame te verhogen. Na debuggen begreep ik hoe transparantie in PyGame werkt met het SRCALPHA-surface. Ik heb alle buttons herpositioneerd: de DEAL HAND knop staat nu centraal, en de HIT en STAND knoppen zijn kleiner en staan naast elkaar. Ook heb ik de overbodige groene tafel verwijderd voor een schoner design.
+
+## 14 December 2025 22:03
+Ik heb de resultatenbanner en statistiekenpanel gemoderniseerd. De "Player WINS!"-banner beweegt nu zachtjes op en neer dankzij een sinus-functie en heeft een transparante achtergrond met een gekleurde rand. De statistieken onderaan staan nu in een mooi panel met gouden rand, wat het spel professioneler laat lijken. Dit vereiste meer begrip van transparantie in PyGame en tekstcentrering.
+

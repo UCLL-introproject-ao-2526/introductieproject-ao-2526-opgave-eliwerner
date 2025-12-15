@@ -39,8 +39,8 @@ outcome = 0
 add_score = False
 results = ['', 'PLAYER BUSTED o_O', 'Player WINS! :)', 'DEALER WINS :(', 'TIE GAME...']
 # startmenu variabelen
-menu_active = True
-start_buttons = []
+# menu_active = True
+# start_buttons = []
 
 
 
@@ -60,16 +60,16 @@ dealer_hand_images = []        # afbeeldingen van dealerhand
 
 
 
-def draw_start_menu():
-    global start_buttons
-    start_buttons = []
+# def draw_start_menu():
+#     global start_buttons
+#     start_buttons = []
 
-    screen.fill('black')
-    # Titel
-    title_text = font.render("BLACKJACK", True, 'white')
-    # Plaats het in het midden van het scherm: WIDTH//2 is het midden van het scherm
-    # We trekken de helft van de breedte van de tekst af om precies te centreren
-    screen.blit(title_text, (WIDTH//2 - title_text.get_width()//2, 200))
+#     screen.fill('black')
+#     # Titel
+#     title_text = font.render("BLACKJACK", True, 'white')
+#     # Plaats het in het midden van het scherm: WIDTH//2 is het midden van het scherm
+#     # We trekken de helft van de breedte van de tekst af om precies te centreren
+#     screen.blit(title_text, (WIDTH//2 - title_text.get_width()//2, 200))
 
 
 
