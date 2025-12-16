@@ -60,3 +60,13 @@ Ik heb glow buttons toegevoegd die een pulserende gouden rand krijgen als de mui
 ## 14 December 2025 22:03
 Ik heb de resultatenbanner en statistiekenpanel gemoderniseerd. De "Player WINS!"-banner beweegt nu zachtjes op en neer dankzij een sinus-functie en heeft een transparante achtergrond met een gekleurde rand. De statistieken onderaan staan nu in een mooi panel met gouden rand, wat het spel professioneler laat lijken. Dit vereiste meer begrip van transparantie in PyGame en tekstcentrering.
 
+## 15 December 2025 13:43
+Ik heb een start menu toegevoegd met een geanimeerde "BLACKJACK" titel die pulseert. Het menu heeft een PLAY knop met glow effect, toont statistieken en decoratieve chips in de hoeken. Ik leerde hoe je meerdere tekstlagen met transparantie gebruikt voor glow effecten.
+
+## 15 December 2025 16:55
+Ik heb een particle systeem toegevoegd dat chips laat vliegen wanneer de speler wint of op de HIT knop klikt. Elke particle beweegt met eigen snelheid en zwaartekracht, wordt transparanter naarmate hij ouder wordt, en verdwijnt na ongeveer een seconde. Bij winst regent het 60 frames lang chips van boven het scherm, en bij elke HIT klik vliegen er tien gouden chips uit de knop. Dit voegt een feestelijk en visueel aantrekkelijk element toe aan de gameplay.
+
+## 16 December 2025 13:48
+Ik heb geluiden toegevoegd aan het spel. Er zijn nu verschillende geluiden voor verschillende acties.
+
+Bij het schudden van de kaarten hoor je een realistisch geluid. Knopklikken maken een klikgeluid. Winnen geeft een vrolijk geluid, verliezen een teleurstellend geluid.
