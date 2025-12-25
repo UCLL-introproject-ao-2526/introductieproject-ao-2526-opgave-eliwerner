@@ -1,18 +1,5 @@
 # Logboek Introductieproject
 
-Dit logboek documenteert voortgang, keuzes, problemen en reflecties tijdens het project. Gebruik het sjabloon hieronder voor elke afgeronde eenheid werk.
-
-## Sjabloon (kopieer voor nieuwe entries)
-```
-## DAG MAAND JAAR UURMINUUT
-Korte maar volledige beschrijving van wat je gedaan hebt (>20 woorden) en vooral waarom je het zo hebt aangepakt. Beschrijf verwachtingen vs resultaat, problemen en hypotheses, en wat je volgende acties zijn.
-- Doel: ...
-- Resultaat: ...
-- Problemen & hypotheses: ...
-- Volgende acties: ...
-```
-
----
 
 ## 7 December 2025 1335
 Project gestart. Ik heb de projectfolder aangemaakt en het logboekbestand toegevoegd.
@@ -70,3 +57,22 @@ Ik heb een particle systeem toegevoegd dat chips laat vliegen wanneer de speler 
 Ik heb geluiden toegevoegd aan het spel. Er zijn nu verschillende geluiden voor verschillende acties.
 
 Bij het schudden van de kaarten hoor je een realistisch geluid. Knopklikken maken een klikgeluid. Winnen geeft een vrolijk geluid, verliezen een teleurstellend geluid.
+
+## 17 December 2025 15:21
+Ik heb mijn feedbackmail verzonden naar Daan met vragen over:
+1. Kaart parsering complexiteit
+2. Code leesbaarheid  
+3. Mijn logboek reflectie
+4. Algemene indruk van mijn toevoegingen
+
+Ik verwacht binnen 1-2 dagen antwoord.
+
+## 24 December 2025 15:41
+Ik heb de feedback van Daan ontvangen en erover nagedacht.
+Over het verwijderen van de regex ben ik het eens. Mijn oude aanpak was complex. Ik heb de parse-functie weggehaald en maak nu direct bestandsnamen.
+De backup file verwijderen snap ik ook. Git is inderdaad genoeg, dus dat bestand is weg.
+Voor de commentaar taal: ik snap dat één taal beter is, maar ik denk zelf in een mix van talen. Ik zal proberen het consistenter te maken.
+De nutteloze "NIEUW" commentaar herken ik. Op dat moment was het handig voor mij, maar voor anderen is het niet nuttig.
+Mijn logboek had persoonlijker kunnen zijn. Ik zal vanaf nu meer schrijven over wat ik leuk vind, waar ik tegenaan loop en wat ik leer.
+
+Algemeen vind ik de feedback heel nuttig. Het compliment dat ik hardwerkend ben en niet moet twijfelen, geeft vertrouwen. Ik ga de suggesties gebruiken en ben benieuwd naar het gesprek bij het examen.

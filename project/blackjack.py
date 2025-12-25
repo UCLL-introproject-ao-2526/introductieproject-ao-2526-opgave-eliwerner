@@ -86,52 +86,97 @@ dealer_hand_images = []        # afbeeldingen van dealerhand
 
 
 
-SUIT_TOKENS = r"hearts|heart|diamonds|diamond|clubs|club|spades|spade|h|d|c|s"
+# SUIT_TOKENS = r"hearts|heart|diamonds|diamond|clubs|club|spades|spade|h|d|c|s"
 
-def parse_rank_from_filename(name_lower):
-    base = re.sub(r"[_\-]+", " ", name_lower)  # normalize separators
-    if 'joker' in base:
-        return None
-    if re.search(r"\b10\b", base):
-        return '10'
-    m = re.search(r"\b([2-9])\b", base)
-    if m:
-        return m.group(1)
-    for word, rank in [(r"\bace\b", 'A'), (r"\bking\b", 'K'), (r"\bqueen\b", 'Q'), (r"\bjack\b", 'J')]:
-        if re.search(word, base):
-            return rank
-    for letter, rank in [(r"\bA\b", 'A'), (r"\bK\b", 'K'), (r"\bQ\b", 'Q'), (r"\bJ\b", 'J')]:
-        if re.search(letter, name_lower, flags=re.IGNORECASE):
-            if re.search(rf"\b({SUIT_TOKENS})\b", base):
-                return rank
-    return None
+# def parse_rank_from_filename(name_lower):
+#     base = re.sub(r"[_\-]+", " ", name_lower)  # normalize separators
+#     if 'joker' in base:
+#         return None
+#     if re.search(r"\b10\b", base):
+#         return '10'
+#     m = re.search(r"\b([2-9])\b", base)
+#     if m:
+#         return m.group(1)
+#     for word, rank in [(r"\bace\b", 'A'), (r"\bking\b", 'K'), (r"\bqueen\b", 'Q'), (r"\bjack\b", 'J')]:
+#         if re.search(word, base):
+#             return rank
+#     for letter, rank in [(r"\bA\b", 'A'), (r"\bK\b", 'K'), (r"\bQ\b", 'Q'), (r"\bJ\b", 'J')]:
+#         if re.search(letter, name_lower, flags=re.IGNORECASE):
+#             if re.search(rf"\b({SUIT_TOKENS})\b", base):
+#                 return rank
+#     return None
 
 def load_card_assets(folder, size):
+    """
+    Simpel kaarten laden - we weten precies welke bestanden we nodig hebben.
+    """
     global card_back_surface, rank_to_surfaces_master
-    if not os.path.isdir(folder):
-        return
-    backs = []
-    rank_map = {r: [] for r in cards}
-    for filename in os.listdir(folder):
-        if not filename.lower().endswith('.png'):
-            continue
-        lower = filename.lower()
-        if 'joker' in lower:
-            continue
-        full_path = os.path.join(folder, filename)
-        try:
-            image = pygame.image.load(full_path).convert_alpha()
-            image = pygame.transform.smoothscale(image, size)
-        except:
-            continue
-        if 'back' in lower or 'background' in lower:
-            backs.append(image)
-            continue
-        rank = parse_rank_from_filename(lower)
-        if rank:
-            rank_map[rank].append(image)
-    card_back_surface = backs[0] if backs else None
-    rank_to_surfaces_master = rank_map    
+    
+    # 1. Lege map voor elke kaartwaarde
+    rank_map = {rank: [] for rank in cards}  # cards = ['2','3',...,'A']
+    
+    # 2. De 4 kleuren in jouw map
+    suits = ['clubs', 'diamonds', 'hearts', 'spades']
+    
+    # 3. Simpel: voor elke combinatie bouwen we de bestandsnaam
+    for suit in suits:
+        for rank in cards:
+            # Bepaal bestandsnaam DEEL 1
+            if rank == 'A':
+                filename = f"ace_of_{suit}.png"
+            elif rank == 'K':
+                filename = f"king_of_{suit}.png"
+            elif rank == 'Q':
+                filename = f"queen_of_{suit}.png"
+            elif rank == 'J':
+                filename = f"jack_of_{suit}.png"
+            else:  # 2 t/m 10
+                filename = f"{rank}_of_{suit}.png"
+            
+            # Probeer te laden
+            try:
+                image = pygame.image.load(os.path.join(folder, filename)).convert_alpha()
+                image = pygame.transform.smoothscale(image, size)
+                rank_map[rank].append(image)
+            except:
+                pass  # Stil fout - we gaan door
+    
+    # 4. Achterkant laden
+    
+    card_back_surface = pygame.image.load(os.path.join(folder, 'back.png'))
+    card_back_surface = pygame.transform.smoothscale(card_back_surface, size)
+    
+        
+    
+    # 5. Opslaan
+    rank_to_surfaces_master = rank_map
+
+# def load_card_assets(folder, size):
+#     global card_back_surface, rank_to_surfaces_master
+#     if not os.path.isdir(folder):
+#         return
+#     backs = []
+#     rank_map = {r: [] for r in cards}
+#     for filename in os.listdir(folder):
+#         if not filename.lower().endswith('.png'):
+#             continue
+#         lower = filename.lower()
+#         if 'joker' in lower:
+#             continue
+#         full_path = os.path.join(folder, filename)
+#         try:
+#             image = pygame.image.load(full_path).convert_alpha()
+#             image = pygame.transform.smoothscale(image, size)
+#         except:
+#             continue
+#         if 'back' in lower or 'background' in lower:
+#             backs.append(image)
+#             continue
+#         rank = parse_rank_from_filename(lower)
+#         if rank:
+#             rank_map[rank].append(image)
+#     card_back_surface = backs[0] if backs else None
+#     rank_to_surfaces_master = rank_map    
 
 def reset_image_pool():
     global rank_to_surfaces_pool, my_hand_images, dealer_hand_images
