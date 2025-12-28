@@ -1,0 +1,42 @@
+Reflectie bij video https://youtu.be/iwUR0kOVNs8
+
+Samenvatting:
+
+In deze presentatie benadrukt Bryan Liles herhaaldelijk het belang van voortdurend testen tijdens softwareontwikkeling. De kernboodschap 
+van zijn talk is duidelijk: "test all the f***ing time". Hij vertelt over zijn persoonlijke evolutie als programmeur, beginnend met Perl 
+en Java, waar hij aanvankelijk zonder veel structuur code en tests schreef. Later ontdekte hij testing frameworks zoals JUnit en begon hij tests te schrijven, 
+maar hij merkte dat deze vaak slecht georganiseerd en fragiel waren. Dit leidde tot verwarring en weinig echte meerwaarde.
+
+
+Met de komst van Ruby on Rails kwam hij in aanraking met Test-Driven Development (TDD), 
+waarbij tests "voor" de code worden geschreven. Hoewel dit een verbetering was, merkte hij dat hij nog steeds tests schreef die te 
+sterk op de implementatie gebaseerd waren. Pas bij Behavior-Driven Development (BDD) begon hij anders te denken: tests moeten 
+beschrijven wat de code zou moeten doen, niet hoe ze het doet. Dit maakt zijn tests leesbaarder en betekenisvoller.
+
+
+Liles legt uit dat TDD en BDD volgens hem geen fundamenteel verschillende concepten zijn, maar eerder andere manieren 
+om hetzelfde doel te bereiken. Hij benadrukt dat testen een vaardigheid is die oefening vraagt en dat het in het begin traag 
+en frustrerend kan aanvoelen. Hij bespreekt ook de emoties die ontwikkelaars ervaren tijdens het testen, zoals frustratie, 
+twijfel en uiteindelijk acceptatie. Volgens hem leidt deze aanpak uiteindelijk tot betere code die minder vaak moet worden herschreven.
+
+Daarnaast bespreekt hij verschillende tools zoals RSpec, Test::Unit, Cucumber en andere alternatieven, maar benadrukt hij 
+dat de keuze van tool minder belangrijk is dan de mindset. Het belangrijkste is dat de code altijd getest wordt.
+Volgens Liles is code zonder tests altijd fout, zelfs als ze toevallig correct werkt.
+
+
+Persoonlijke reflectie:
+
+Ik ben het grotendeels eens met de boodschap van Bryan Liles dat testen een essentieel onderdeel is van programmeren. 
+Zelfs zonder alles technisch te begrijpen, werd het duidelijk dat testen helpt om fouten te vermijden en betere code te schrijven. 
+Zijn presentatie is zeer energiek en humoristisch, maar ook erg herhalend. Dat maakte de hoofdboodschap duidelijk, maar soms ook 
+wat vermoeiend. Ik vond het interessant dat hij ook sprak over gevoelens zoals frustratie en acceptatie, omdat dit laat zien 
+dat programmeren niet alleen technisch is, maar ook mentaal uitdagend. Waar ik wat moeite mee heb, is zijn stelling dat je altijd 
+moet testen, ongeacht deadlines of context, omdat dit in de praktijk soms moeilijk haalbaar lijkt. Toch motiveert 
+zijn talk om testen serieuzer te nemen.
+
+
+Conclusie:
+
+De spreker benadrukt constant testen als kernprincipe. Ondanks herhaling en technische complexiteit is zijn boodschap duidelijk, 
+motiverend en relevant voor softwareontwikkeling.
+
