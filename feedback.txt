@@ -1,0 +1,32 @@
+Hallo Daan, 
+
+Ik stuur je deze email als feedback over het introductieproject vak. Ik wil graag mijn ervaringen delen 
+nu het project is afgerond.  
+
+Allereerst vond ik het vak erg leuk, vooral omdat we een game mochten maken. Hoewel het soms uitdagend was, maakt dit de opdracht juist boeiend.
+Het voelde niet als "schoolwerk" maar als iets creatiefs waar ik echt in kon duiken. 
+
+De Blackjack tutorial was voor mij een sterk punt. Deze was duidelijk uitgelegd en gaf me een solide basis om verder op te bouwen. 
+Ik waardeerde vooral de vrijheid die we daarna kregen om zelf te kiezen welke extra features we wilden toevoegen.
+Voor mij waren dat onder andere het geanimeerde startmenu en de particle effects. Door deze keuzevrijheid heb ik veel meer 
+bijgeleerd dan wanneer alles strikt was voorgeschreven. Het voelde alsof ik eigenaar was van mijn project. 
+
+Een aspect waar ik wat minder duidelijkheid over had, waren de comminicatie challenges. Als toekomstige programmeur vond ik 
+het juist interessant om te zien dat communicatie zo'n belangrijk onderdeel is van ons vak. Veel mensen denken dat programmeurs 
+alleen maar met computers werken, maar dit project liet zien dat praten en schrijven over je werk minstens zo belangrijk is. 
+
+Wat ik lastiger vond, was het nut van de verschillende challenges die we tussendoor moesten doen. Soms kon ik de antwoorden 
+online vinden of aan ChatGPT vragen, waardoor ik niet helemaal begreep wat ik er precies van moest leren. 
+Misschien zou het helpen als er bij zulke opdrachten wat meer context of duiding wordt gegeven over waarom ze relevant zijn voor 
+een project zoals dit. Dit zou kunnen voorkomen dat studenten (zoals ik) het gevoel krijgen dat ze iets 'slecht' hebben gedaan, 
+terwijl ze gewoon het grotere plaatje missen. 
+
+Al met al kijk ik positief terug op het project. Het heeft me niet alleen Pygame en Python beter leren kennen, maar ook 
+geleerd hoe ik zelfstandig problemen kan aanpakken, feedback kan verwerken en over mijn werk kan communiceren. 
+Dat zijn vaardigheden die ik zeker meeneem naar toekomstige projecten.
+
+Bedankt voor de goede begeleiding dit semester.
+
+
+Met vriendelijke groeten, 
+Eli Werner
